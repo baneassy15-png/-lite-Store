@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'ÉLITE STORE - Boutique en Ligne d'Exception</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0b0b; color: #f3f4f6; overflow-x: hidden; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #aa771c 100%); }
+        .gold-text { background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gold-border { border-color: #d4af37; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+
+    <!-- CLIENT VIEW -->
+    <div id="client-view" class="flex-1 flex flex-col">
+        <!-- Header -->
+        <header class="bg-black/80 backdrop-blur-md border-b border-amber-500/20 sticky top-0 z-40">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-serif font-bold text-xl shadow-lg shadow-amber-500/20">E</div>
+                    <div>
+                        <h1 class="font-serif text-lg font-bold tracking-wider gold-text">L'ÉLITE STORE</h1>
+                        <p class="text-[10px] uppercase tracking-widest text-amber-200/60">Boutique d'Exception</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-xs text-amber-200/40 tracking-wider">Service Premium Sénégal</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Banner Section -->
+        <section id="hero-section" class="relative py-16 px-4 bg-cover bg-center border-b border-amber-500/20" style="background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1200');">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <span id="banner-tag" class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-amber-500/10 text-amber-300 border border-amber-500/30">Soins Ciblés & Beauté</span>
+                <h2 id="banner-title" class="font-serif text-3xl md:text-5xl font-bold text-white leading-tight">Sublimez Votre Regard, Votre Sourire & Votre Peau</h2>
+                <p id="banner-desc" class="text-sm md:text-base text-gray-300 max-w-xl mx-auto">Retrouvez nos meilleurs produits spécialisés pour le soin des yeux, le blanchiment dentaire et la beauté du visage. Livraison rapide à Dakar et dans toutes les régions du Sénégal.</p>
+                <div class="pt-4">
+                    <a href="#catalog" class="inline-flex items-center space-x-2 px-6 py-3 rounded-full gold-gradient text-black font-semibold text-sm shadow-lg hover:opacity-95 transition">
+                        <span>Découvrir nos soins</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog Section -->
+        <main id="catalog" class="flex-1 max-w-6xl w-full mx-auto px-4 py-12">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="font-serif text-2xl font-bold text-white">Nos Produits d'Exception</h3>
+                <div class="flex space-x-2 overflow-x-auto pb-2">
+                    <button onclick="filterCatalog('all')" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-amber-500 text-black transition">Tous</button>
+                    <button onclick="filterCatalog('Visage')" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-zinc-900 text-amber-300 border border-amber-500/30 hover:bg-amber-500/10 transition">Visage & Yeux</button>
+                    <button onclick="filterCatalog('Dents')" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-zinc-900 text-amber-300 border border-amber-500/30 hover:bg-amber-500/10 transition">Soin des Dents</button>
+                </div>
+            </div>
+
+            <div id="client-products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Dynamically populated -->
+            </div>
+        </main>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative my-8">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div>
+                <h3 class="font-serif text-xl font-bold text-white">Finaliser votre commande</h3>
+                <p id="checkout-product-info" class="text-xs text-amber-400/80 mt-1">Produit sélectionné</p>
+            </div>
+
+            <form id="order-form" onsubmit="submitOrder(event)" class="space-y-4">
+                <input type="hidden" id="order-product-id">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Nom et Prénom *</label>
+                    <input type="text" id="order-name" required class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Ex: Aminata Diallo">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Numéro de Téléphone *</label>
+                    <input type="tel" id="order-phone" required class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Ex: 77 123 45 67">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Ville / Zone de Livraison *</label>
+                    <div class="grid grid-cols-2 gap-3 mt-1">
+                        <label class="flex items-center space-x-2 p-3 rounded-xl border border-zinc-700 bg-black/30 cursor-pointer hover:border-amber-500 transition">
+                            <input type="radio" name="shipping-zone" value="dakar" checked onchange="updateShippingTotal()" class="text-amber-500 focus:ring-0">
+                            <div>
+                                <p class="text-xs font-semibold text-white">Dakar</p>
+                                <p class="text-[10px] text-amber-400" id="fee-dakar-label">1 000 FCFA</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center space-x-2 p-3 rounded-xl border border-zinc-700 bg-black/30 cursor-pointer hover:border-amber-500 transition">
+                            <input type="radio" name="shipping-zone" value="region" onchange="updateShippingTotal()" class="text-amber-500 focus:ring-0">
+                            <div>
+                                <p class="text-xs font-semibold text-white">Régions</p>
+                                <p class="text-[10px] text-amber-400" id="fee-region-label">1 500 FCFA</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Adresse précise (Quartier / Rue) *</label>
+                    <input type="text" id="order-address" required class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Ex: Liberté 6, Villa N°12">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Mode de Paiement *</label>
+                    <select id="order-payment" class="w-full bg-black/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white focus:border-amber-500 outline-none">
+                        <option value="Paiement à l'arrivée">Paiement à l'arrivée (Cash)</option>
+                        <option value="Orange Money">Orange Money</option>
+                        <option value="Wave">Wave</option>
+                    </select>
+                </div>
+
+                <div class="bg-black/40 p-4 rounded-xl border border-zinc-800 space-y-2">
+                    <div class="flex justify-between text-xs text-gray-400">
+                        <span>Prix du produit :</span>
+                        <span id="summary-prod-price">0 FCFA</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-400">
+                        <span>Frais de livraison :</span>
+                        <span id="summary-shipping-price">1 000 FCFA</span>
+                    </div>
+                    <div class="border-t border-zinc-800 pt-2 flex justify-between text-sm font-bold text-white">
+                        <span>Total à payer :</span>
+                        <span id="summary-total-price" class="text-amber-400">0 FCFA</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl gold-gradient text-black font-semibold text-sm shadow-lg hover:opacity-95 transition">
+                    Valider ma commande
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="order-success-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-amber-500/40 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl relative">
+            <div class="w-16 h-16 rounded-full gold-gradient mx-auto flex items-center justify-center text-black text-2xl shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-white">Commande Enregistrée !</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+                Votre commande a bien été prise en compte par <span class="text-amber-400 font-semibold">L'ÉLITE STORE</span>.<br>
+                Un agent vous contactera très rapidement par téléphone pour confirmer les détails et organiser votre livraison.
+            </p>
+            <button onclick="closeSuccessModal()" class="w-full py-2.5 rounded-xl gold-gradient text-black font-semibold text-sm">
+                Fermer
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL (PIN) -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-2xl max-w-sm w-full p-6 space-y-4 text-center shadow-2xl relative">
+            <button onclick="closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="w-12 h-12 rounded-full gold-gradient mx-auto flex items-center justify-center text-black font-bold text-xl"><i class="fa-solid fa-lock"></i></div>
+            <h3 class="font-serif text-lg font-bold text-white">Authentification Sécurisée</h3>
+            <p class="text-xs text-gray-400">Veuillez entrer votre code d'accès confidentiel</p>
+            <input type="password" id="admin-pin-input" maxlength="4" class="w-32 mx-auto block bg-black border border-zinc-700 rounded-xl px-4 py-2 text-center text-xl tracking-widest text-amber-400 focus:border-amber-500 outline-none" placeholder="••••">
+            <button onclick="verifyAdminPin()" class="w-full py-2.5 rounded-xl gold-gradient text-black font-semibold text-sm">Valider</button>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD VIEW -->
+    <div id="admin-view" class="flex-1 hidden flex flex-col bg-[#0b0b0b]">
+        <header class="bg-black border-b border-amber-500/20 px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center text-black font-serif font-bold">A</div>
+                <div>
+                    <h2 class="font-serif text-sm font-bold text-white">Espace Administrateur</h2>
+                    <p class="text-[10px] text-amber-400/80">L'ÉLITE STORE - Gestion Globale</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="switchView('client')" class="bg-zinc-800 text-white px-3 py-1.5 rounded-xl text-xs hover:bg-zinc-700 transition"><i class="fa-solid fa-store mr-1"></i> Voir la Boutique</button>
+                <button onclick="logoutAdmin()" class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-xl text-xs hover:bg-rose-500/30 transition"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+        </header>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="bg-zinc-900 border-b border-zinc-800 px-4 flex space-x-2 overflow-x-auto py-2">
+            <button onclick="switchAdminTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 text-black transition whitespace-nowrap"><i class="fa-solid fa-chart-line mr-1.5"></i> Chiffre d'Affaires</button>
+            <button onclick="switchAdminTab('products')" id="tab-btn-products" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:bg-zinc-800 transition whitespace-nowrap"><i class="fa-solid fa-box mr-1.5"></i> Gestion Produits & Stocks</button>
+            <button onclick="switchAdminTab('deliveries')" id="tab-btn-deliveries" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:bg-zinc-800 transition whitespace-nowrap"><i class="fa-solid fa-truck mr-1.5"></i> Livraisons & Livreurs</button>
+            <button onclick="switchAdminTab('distribution')" id="tab-btn-distribution" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:bg-zinc-800 transition whitespace-nowrap"><i class="fa-solid fa-boxes-stacked mr-1.5"></i> Distribution & Restants</button>
+            <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:bg-zinc-800 transition whitespace-nowrap"><i class="fa-solid fa-gear mr-1.5"></i> Paramètres & Bannière</button>
+        </div>
+
+        <!-- Admin Tab Content -->
+        <main class="flex-1 max-w-6xl w-full mx-auto p-4 space-y-6 overflow-y-auto">
+
+            <!-- TAB 1: DASHBOARD & CA -->
+            <div id="admin-tab-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">Chiffre d'Affaires Brut</p>
+                        <h3 id="stat-ca" class="text-2xl font-bold text-amber-400 mt-1">0 FCFA</h3>
+                        <p class="text-[10px] text-gray-500 mt-1">Basé sur les commandes validées</p>
+                    </div>
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Commandes</p>
+                        <h3 id="stat-orders-count" class="text-2xl font-bold text-white mt-1">0</h3>
+                        <p class="text-[10px] text-gray-500 mt-1">Transmises vers Google Sheets</p>
+                    </div>
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">Colis Livrés & Encaissés</p>
+                        <h3 id="stat-cash" class="text-2xl font-bold text-emerald-400 mt-1">0 FCFA</h3>
+                        <p class="text-[10px] text-gray-500 mt-1">Fonds rentrés en caisse</p>
+                    </div>
+                </div>
+
+                <!-- Shopify Style Zigzag Chart Container avec grille claire -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-serif font-bold text-white text-base">Évolution du Chiffre d'Affaires</h4>
+                            <p class="text-xs text-gray-400">Performances et tendances des ventes</p>
+                        </div>
+                        <div class="flex space-x-1 bg-black p-1 rounded-xl border border-zinc-800 text-xs">
+                            <button onclick="setChartFilter('day')" id="chart-btn-day" class="px-3 py-1 rounded-lg bg-amber-500 text-black font-semibold">Jour</button>
+                            <button onclick="setChartFilter('month')" id="chart-btn-month" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white">Mois</button>
+                            <button onclick="setChartFilter('year')" id="chart-btn-year" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white">Année</button>
+                        </div>
+                    </div>
+                    <div class="h-64 w-full relative pt-6 pb-2">
+                        <svg class="w-full h-full overflow-visible" viewBox="0 0 600 200">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#d4af37" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#d4af37" stop-opacity="0.0"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Grid Lines (Lignes horizontales et verticales style Excel) -->
+                            <g stroke="#27272a" stroke-width="1" stroke-dasharray="3 3">
+                                <line x1="0" y1="40" x2="600" y2="40" />
+                                <line x1="0" y1="80" x2="600" y2="80" />
+                                <line x1="0" y1="120" x2="600" y2="120" />
+                                <line x1="0" y1="160" x2="600" y2="160" />
+
+                                <line x1="0" y1="0" x2="0" y2="200" />
+                                <line x1="120" y1="0" x2="120" y2="200" />
+                                <line x1="240" y1="0" x2="240" y2="200" />
+                                <line x1="360" y1="0" x2="360" y2="200" />
+                                <line x1="480" y1="0" x2="480" y2="200" />
+                                <line x1="600" y1="0" x2="600" y2="200" />
+                            </g>
+                            
+                            <path id="chart-path-area" d="M 0 140 Q 100 60, 200 100 T 400 50 T 600 30 L 600 200 L 0 200 Z" fill="url(#chartGradient)" />
+                            <path id="chart-path-line" d="M 0 140 Q 100 60, 200 100 T 400 50 T 600 30" fill="none" stroke="#d4af37" stroke-width="3" stroke-linecap="round" />
+                            
+                            <g fill="#d4af37" stroke="#000" stroke-width="2">
+                                <circle cx="0" cy="140" r="5" />
+                                <circle cx="120" cy="90" r="5" />
+                                <circle cx="240" cy="110" r="5" />
+                                <circle cx="360" cy="60" r="5" />
+                                <circle cx="480" cy="40" r="5" />
+                                <circle cx="600" cy="30" r="5" />
+                            </g>
+                        </svg>
+                        <div id="chart-labels" class="flex justify-between text-[10px] text-amber-300/80 mt-3 border-t border-zinc-800 pt-2 font-medium">
+                            <span>Lundi</span>
+                            <span>Mardi</span>
+                            <span>Mercredi</span>
+                            <span>Jeudi</span>
+                            <span>Vendredi</span>
+                            <span>Samedi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders List -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-serif font-bold text-white text-base">Commandes Récentes</h4>
+                            <p class="text-xs text-gray-400">Transmises automatiquement vers Google Sheets</p>
+                        </div>
+                        <button onclick="exportOrdersToSheets()" class="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs hover:bg-emerald-600/30 transition">
+                            <i class="fa-solid fa-file-excel mr-1"></i> Sync Google Sheets
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs min-w-[700px]">
+                            <thead>
+                                <tr class="border-b border-zinc-800 text-gray-400 uppercase">
+                                    <th class="pb-3">Date</th>
+                                    <th class="pb-3">Client</th>
+                                    <th class="pb-3">Téléphone</th>
+                                    <th class="pb-3">Produit</th>
+                                    <th class="pb-3">Zone / Ville</th>
+                                    <th class="pb-3">Total</th>
+                                    <th class="pb-3">Paiement</th>
+                                    <th class="pb-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-orders-tbody" class="divide-y divide-zinc-800/60">
+                                <!-- Dynamic orders -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: PRODUCTS & STOCK MANAGEMENT -->
+            <div id="admin-tab-products" class="space-y-4 hidden">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-base">Gestion du Catalogue & Stock</h4>
+                        <p class="text-xs text-gray-400">Glissez vers la droite pour voir tous les détails</p>
+                    </div>
+                    <button onclick="openProductModal()" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">
+                        <i class="fa-solid fa-plus mr-1"></i> Ajouter un Produit
+                    </button>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-xl">
+                    <table class="w-full text-left border-collapse text-xs min-w-[650px]">
+                        <thead>
+                            <tr class="border-b border-zinc-800 text-gray-400 uppercase bg-black/40">
+                                <th class="p-3">Photo</th>
+                                <th class="p-3">Nom du Produit</th>
+                                <th class="p-3">Catégorie</th>
+                                <th class="p-3">Prix unitaire</th>
+                                <th class="p-3">Stock disponible</th>
+                                <th class="p-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products-tbody" class="divide-y divide-zinc-800">
+                            <!-- Dynamic products -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: DELIVERIES & COURIERS -->
+            <div id="admin-tab-deliveries" class="space-y-4 hidden">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-base">Feuilles de Livraison Journalières</h4>
+                        <p class="text-xs text-gray-400">Suivi des colis confiés aux livreurs</p>
+                    </div>
+                    <button onclick="openDeliveryModal()" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">
+                        <i class="fa-solid fa-truck-fast mr-1"></i> Nouvelle Ligne
+                    </button>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-xl">
+                    <table class="w-full text-left border-collapse text-xs min-w-[650px]">
+                        <thead>
+                            <tr class="border-b border-zinc-800 text-gray-400 uppercase bg-black/40">
+                                <th class="p-3">Date</th>
+                                <th class="p-3">Livreur</th>
+                                <th class="p-3">Matricule / Client</th>
+                                <th class="p-3">Colis Livrés</th>
+                                <th class="p-3">Statut</th>
+                                <th class="p-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-deliveries-tbody" class="divide-y divide-zinc-800">
+                            <!-- Dynamic deliveries -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: DISTRIBUTION & RESTANTS -->
+            <div id="admin-tab-distribution" class="space-y-4 hidden">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-base">Distribution de Colis & Report des Restants</h4>
+                        <p class="text-xs text-gray-400">Glissez vers la droite pour visualiser l'ensemble du tableau</p>
+                    </div>
+                    <button onclick="openDistributionModal()" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">
+                        <i class="fa-solid fa-boxes-packing mr-1"></i> Attribuer des Colis
+                    </button>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-xl">
+                    <table class="w-full text-left border-collapse text-xs min-w-[650px]">
+                        <thead>
+                            <tr class="border-b border-zinc-800 text-gray-400 uppercase bg-black/40">
+                                <th class="p-3">Date</th>
+                                <th class="p-3">Livreur</th>
+                                <th class="p-3">Restant Veille</th>
+                                <th class="p-3">Colis Attribués</th>
+                                <th class="p-3 text-amber-400 font-bold">Total En Cours</th>
+                                <th class="p-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-distribution-tbody" class="divide-y divide-zinc-800">
+                            <!-- Dynamic distributions -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 5: SETTINGS & BANNER EDITOR -->
+            <div id="admin-tab-settings" class="space-y-6 hidden">
+                <!-- Add New Courier Section -->
+                <div class="bg-zinc-900 border border-amber-500/30 p-5 rounded-2xl space-y-4">
+                    <h4 class="font-serif font-bold text-white text-base">Ajouter un Nouveau Livreur</h4>
+                    <p class="text-xs text-gray-400">Enregistrez ici vos livreurs (ex: Modou, Assane, Abdoulaye, Cheikh, Ousmane)</p>
+                    <div class="flex space-x-2">
+                        <input type="text" id="new-courier-name" placeholder="Nom du nouveau livreur (ex: Cheikh)" class="flex-1 bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <button onclick="addCourier()" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap">Ajouter le Livreur</button>
+                    </div>
+                    <div class="pt-2">
+                        <p class="text-xs uppercase text-gray-400 mb-2">Livreurs actuellement enregistrés :</p>
+                        <div id="couriers-list" class="flex flex-wrap gap-2">
+                            <!-- Dynamic couriers pills -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Fees Configuration -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <h4 class="font-serif font-bold text-white text-base">Tarifs de Livraison Automatiques</h4>
+                    <form onsubmit="saveShippingFees(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Tarif Dakar (FCFA)</label>
+                            <input type="number" id="fee-dakar-input" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Tarif Régions (FCFA)</label>
+                            <input type="number" id="fee-region-input" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div class="sm:col-span-2 flex justify-end">
+                            <button type="submit" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">Enregistrer les tarifs</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Banner Editor -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <h4 class="font-serif font-bold text-white text-base">Éditeur de la Bannière d'Accueil</h4>
+                    <form onsubmit="saveBannerSettings(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Badge / Étiquette</label>
+                            <input type="text" id="banner-tag-input" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Grand Titre</label>
+                            <input type="text" id="banner-title-input" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Sous-titre / Description</label>
+                            <textarea id="banner-desc-input" rows="3" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">URL de l'image de fond (Hero)</label>
+                            <input type="url" id="banner-img-input" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">Mettre à jour la bannière</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Google Sheets Webhook Configuration -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <h4 class="font-serif font-bold text-white text-base">Intégration Google Sheets (Closeurs)</h4>
+                    <p class="text-xs text-gray-400">URL du Webhook Apps Script pour l'envoi instantané des commandes en 2-3 secondes.</p>
+                    <div class="flex space-x-2">
+                        <input type="url" id="sheets-webhook-input" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <button onclick="saveWebhook()" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap">Enregistrer</button>
+                    </div>
+                </div>
+
+                <!-- PIN Code Change -->
+                <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl space-y-4">
+                    <h4 class="font-serif font-bold text-white text-base">Modifier le Code PIN Administrateur</h4>
+                    <form onsubmit="saveNewPin(event)" class="space-y-3">
+                        <input type="password" id="new-pin-input" maxlength="4" placeholder="Nouveau PIN à 4 chiffres" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <div class="flex justify-end">
+                            <button type="submit" class="gold-gradient text-black px-4 py-2 rounded-xl text-xs font-semibold">Changer le PIN</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- PRODUCT MODAL (Admin Add/Edit with Stock) -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-2xl max-w-md w-full p-6 space-y-4 relative">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="font-serif text-lg font-bold text-white">Ajouter / Modifier un Produit & Stock</h3>
+            <form id="product-form" onsubmit="saveProduct(event)" class="space-y-4">
+                <input type="hidden" id="prod-id">
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Nom du Produit</label>
+                    <input type="text" id="prod-name" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="Sérum Éclat Regard">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Catégorie</label>
+                    <select id="prod-category" class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <option value="Visage">Visage & Yeux</option>
+                        <option value="Dents">Soin des Dents</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Prix (FCFA)</label>
+                    <input type="number" id="prod-price" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="15000">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Quantité en Stock</label>
+                    <input type="number" id="prod-stock" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="50">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">URL de la Photo</label>
+                    <input type="url" id="prod-image" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="https://images.unsplash.com/...">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeProductModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-gray-300">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold gold-gradient text-black">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DELIVERY MODAL (Admin) -->
+    <div id="delivery-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-2xl max-w-md w-full p-6 space-y-4 relative">
+            <button onclick="closeDeliveryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="font-serif text-lg font-bold text-white">Feuille de Livraison Journalière</h3>
+            <form id="delivery-form" onsubmit="saveDelivery(event)" class="space-y-4">
+                <input type="hidden" id="deliv-id">
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Date</label>
+                    <input type="date" id="deliv-date" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Livreur</label>
+                    <select id="deliv-courier" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <!-- Dynamic couriers -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Matricule ou Client</label>
+                    <input type="text" id="deliv-matricule" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="Ex: Client Dakar #102">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Nombre de colis livrés</label>
+                    <input type="number" id="deliv-count" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="5">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Statut</label>
+                    <select id="deliv-status" class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <option value="Livré & Encaissé">Livré & Encaissé</option>
+                        <option value="En cours">En cours</option>
+                        <option value="Retour / Annulé">Retour / Annulé</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeDeliveryModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-gray-300">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold gold-gradient text-black">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DISTRIBUTION MODAL (Admin) -->
+    <div id="distribution-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-2xl max-w-md w-full p-6 space-y-4 relative">
+            <button onclick="closeDistributionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="font-serif text-lg font-bold text-white">Distribution & Restants</h3>
+            <form id="distribution-form" onsubmit="saveDistribution(event)" class="space-y-4">
+                <input type="hidden" id="dist-id">
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Date</label>
+                    <input type="date" id="dist-date" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Livreur</label>
+                    <select id="dist-courier" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none">
+                        <!-- Dynamic couriers -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Colis Restants de la Veille</label>
+                    <input type="number" id="dist-yesterday" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="2">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 mb-1">Nouveaux Colis Donnés Aujourd'hui</label>
+                    <input type="number" id="dist-given" required class="w-full bg-black border border-zinc-700 rounded-xl px-3 py-2 text-sm text-white focus:border-amber-500 outline-none" placeholder="30">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeDistributionModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-gray-300">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold gold-gradient text-black">Calculer & Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer dissimulé avec phrase neutre 100% confidentielle -->
+    <footer class="bg-black border-t border-amber-500/20 py-6 text-center text-xs text-gray-500 space-y-1">
+        <p id="secret-admin-trigger" class="cursor-pointer select-none hover:text-gray-400 transition inline-block">
+            © 2026 L'ÉLITE STORE. Tous droits réservés.
+        </p>
+        <p class="text-[10px] text-zinc-600 tracking-wider">Plateforme sécurisée de commerce en ligne et distribution.</p>
+    </footer>
+
+    <!-- App JavaScript Logic -->
+    <script>
+        let products = JSON.parse(localStorage.getItem('elite_products')) || [
+            { id: 1, name: 'Sérum Regard Éclat', category: 'Visage', price: 15000, stock: 45, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600' },
+            { id: 2, name: 'Kit Blanchiment Dentaire Pro', category: 'Dents', price: 20000, stock: 30, image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=600' },
+            { id: 3, name: 'Crème Visage Or 24K', category: 'Visage', price: 25000, stock: 18, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=600' }
+        ];
+
+        let orders = JSON.parse(localStorage.getItem('elite_orders')) || [
+            { id: 101, date: '28/10/2026', name: 'Fatou Ndiaye', phone: '77 890 12 34', city: 'Dakar', address: 'Mermoz Pyrotechnie', product: 'Sérum Regard Éclat', total: 16000, payment: 'Orange Money', status: 'Validée' },
+            { id: 102, date: '29/10/2026', name: 'Mamadou Ba', phone: '76 543 21 09', city: 'Région', address: 'Thiès Ville', product: 'Kit Blanchiment Dentaire Pro', total: 21500, payment: 'Wave', status: 'Validée' }
+        ];
+
+        let deliveries = JSON.parse(localStorage.getItem('elite_deliveries')) || [
+            { id: 201, date: '2026-10-28', courier: 'Modou', matricule: 'Dakar Centre #01', count: 8, status: 'Livré & Encaissé' },
+            { id: 202, date: '2026-10-29', courier: 'Assane', matricule: 'Almadies & Ngor', count: 5, status: 'En cours' }
+        ];
+
+        let distributions = JSON.parse(localStorage.getItem('elite_distributions')) || [
+            { id: 301, date: '2026-10-28', courier: 'Modou', yesterday: 3, given: 20 },
+            { id: 302, date: '2026-10-29', courier: 'Abdoulaye', yesterday: 5, given: 25 }
+        ];
+
+        let couriers = JSON.parse(localStorage.getItem('elite_couriers')) || ['Modou', 'Assane', 'Abdoulaye'];
+        
+        let settings = JSON.parse(localStorage.getItem('elite_settings')) || {
+            pin: '2026',
+            feeDakar: 1000,
+            feeRegion: 1500,
+            webhookUrl: '',
+            bannerTag: 'Soins Ciblés & Beauté',
+            bannerTitle: 'Sublimez Votre Regard, Votre Sourire & Votre Peau',
+            bannerDesc: 'Retrouvez nos meilleurs produits spécialisés pour le soin des yeux, le blanchiment dentaire et la beauté du visage. Livraison rapide à Dakar et dans toutes les régions du Sénégal.',
+            bannerImg: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1200'
+        };
+
+        let currentFilter = 'all';
+        let currentCheckoutProduct = null;
+
+        function saveAll() {
+            localStorage.setItem('elite_products', JSON.stringify(products));
+            localStorage.setItem('elite_orders', JSON.stringify(orders));
+            localStorage.setItem('elite_deliveries', JSON.stringify(deliveries));
+            localStorage.setItem('elite_distributions', JSON.stringify(distributions));
+            localStorage.setItem('elite_couriers', JSON.stringify(couriers));
+            localStorage.setItem('elite_settings', JSON.stringify(settings));
+            renderAll();
+        }
+
+        function switchView(view) {
+            if(view === 'admin') {
+                document.getElementById('admin-login-modal').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-view').classList.add('hidden');
+                document.getElementById('client-view').classList.remove('hidden');
+            }
+        }
+
+        // Secret Long Press (1.5 seconds) on Copyright
+        let pressTimer = null;
+        const trigger = document.getElementById('secret-admin-trigger');
+        
+        trigger.addEventListener('mousedown', () => {
+            pressTimer = setTimeout(() => {
+                document.getElementById('admin-login-modal').classList.remove('hidden');
+            }, 1500);
+        });
+        trigger.addEventListener('mouseup', () => clearTimeout(pressTimer));
+        trigger.addEventListener('touchstart', () => {
+            pressTimer = setTimeout(() => {
+                document.getElementById('admin-login-modal').classList.remove('hidden');
+            }, 1500);
+        });
+        trigger.addEventListener('touchend', () => clearTimeout(pressTimer));
+
+        function closeAdminLogin() {
+            document.getElementById('admin-login-modal').classList.add('hidden');
+            document.getElementById('admin-pin-input').value = '';
+        }
+
+        function verifyAdminPin() {
+            const entered = document.getElementById('admin-pin-input').value;
+            if(entered === settings.pin) {
+                closeAdminLogin();
+                document.getElementById('client-view').classList.add('hidden');
+                document.getElementById('admin-view').classList.remove('hidden');
+                renderAdmin();
+            } else {
+                alert('Code PIN incorrect.');
+            }
+        }
+
+        function logoutAdmin() {
+            switchView('client');
+        }
+
+        function switchAdminTab(tab) {
+            ['dashboard', 'products', 'deliveries', 'distribution', 'settings'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = 'px-4 py-2 rounded-xl text-xs font-semibold text-gray-300 hover:bg-zinc-800 transition whitespace-nowrap';
+            });
+            document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 text-black transition whitespace-nowrap';
+        }
+
+        function filterCatalog(cat) {
+            currentFilter = cat;
+            renderCatalog();
+        }
+
+        function renderCatalog() {
+            document.getElementById('banner-tag').innerText = settings.bannerTag;
+            document.getElementById('banner-title').innerText = settings.bannerTitle;
+            document.getElementById('banner-desc').innerText = settings.bannerDesc;
+            document.getElementById('hero-section').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${settings.bannerImg}')`;
+
+            let html = '';
+            products.filter(p => currentFilter === 'all' || p.category === currentFilter).forEach(p => {
+                html += `
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-amber-500/50 transition shadow-lg">
+                        <div class="h-56 overflow-hidden relative">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold text-amber-300 border border-amber-500/30">${p.category}</span>
+                            <span class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold text-white border border-zinc-700">Stock: ${p.stock}</span>
+                        </div>
+                        <div class="p-5 space-y-3">
+                            <h4 class="font-serif font-bold text-white text-lg">${p.name}</h4>
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="text-amber-400 font-bold text-base">${p.price.toLocaleString()} FCFA</span>
+                                <button onclick="openCheckoutModal(${p.id})" class="px-4 py-2 rounded-xl gold-gradient text-black font-semibold text-xs shadow hover:opacity-90 transition">
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('client-products-grid').innerHTML = html || '<p class="text-gray-500 text-center col-span-3 py-8">Aucun produit disponible</p>';
+        }
+
+        function openCheckoutModal(productId) {
+            currentCheckoutProduct = products.find(p => p.id === productId);
+            if(!currentCheckoutProduct) return;
+
+            document.getElementById('order-product-id').value = currentCheckoutProduct.id;
+            document.getElementById('checkout-product-info').innerText = `${currentCheckoutProduct.name} - ${currentCheckoutProduct.price.toLocaleString()} FCFA`;
+            document.getElementById('fee-dakar-label').innerText = `${settings.feeDakar.toLocaleString()} FCFA`;
+            document.getElementById('fee-region-label').innerText = `${settings.feeRegion.toLocaleString()} FCFA`;
+            document.getElementById('order-form').reset();
+            document.querySelector('input[name="shipping-zone"][value="dakar"]').checked = true;
+            updateShippingTotal();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('order-success-modal').classList.add('hidden');
+        }
+
+        function updateShippingTotal() {
+            if(!currentCheckoutProduct) return;
+            const zone = document.querySelector('input[name="shipping-zone"]:checked').value;
+            const shippingFee = zone === 'dakar' ? settings.feeDakar : settings.feeRegion;
+            const total = currentCheckoutProduct.price + shippingFee;
+
+            document.getElementById('summary-prod-price').innerText = currentCheckoutProduct.price.toLocaleString() + ' FCFA';
+            document.getElementById('summary-shipping-price').innerText = shippingFee.toLocaleString() + ' FCFA';
+            document.getElementById('summary-total-price').innerText = total.toLocaleString() + ' FCFA';
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const zone = document.querySelector('input[name="shipping-zone"]:checked').value;
+            const shippingFee = zone === 'dakar' ? settings.feeDakar : settings.feeRegion;
+            const total = currentCheckoutProduct.price + shippingFee;
+
+            const newOrder = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString('fr-FR'),
+                name: document.getElementById('order-name').value,
+                phone: document.getElementById('order-phone').value,
+                city: zone === 'dakar' ? 'Dakar' : 'Région',
+                address: document.getElementById('order-address').value,
+                product: currentCheckoutProduct.name,
+                total: total,
+                payment: document.getElementById('order-payment').value,
+                status: 'Validée'
+            };
+
+            orders.unshift(newOrder);
+            saveAll();
+            closeCheckoutModal();
+
+            // Affichage de la modale de succès élégante au lieu de l'alert basique
+            document.getElementById('order-success-modal').classList.remove('hidden');
+
+            if(settings.webhookUrl) {
+                fetch(settings.webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newOrder)
+                }).catch(err => console.log('Erreur envoi Google Sheets:', err));
+            }
+        }
+
+        function renderAll() {
+            renderCatalog();
+            if(!document.getElementById('admin-view').classList.contains('hidden')) {
+                renderAdmin();
+            }
+        }
+
+        function renderAdmin() {
+            let totalCA = orders.reduce((acc, o) => acc + o.total, 0);
+            let totalCash = deliveries.filter(d => d.status === 'Livré & Encaissé').reduce((acc, d) => acc + (d.count * 15000), 0);
+            document.getElementById('stat-ca').innerText = totalCA.toLocaleString() + ' FCFA';
+            document.getElementById('stat-orders-count').innerText = orders.length;
+            document.getElementById('stat-cash').innerText = totalCash.toLocaleString() + ' FCFA';
+
+            let ordersHtml = '';
+            orders.forEach(o => {
+                ordersHtml += `
+                    <tr class="hover:bg-zinc-800/50">
+                        <td class="p-3 text-gray-400">${o.date}</td>
+                        <td class="p-3 font-semibold text-white">${o.name}</td>
+                        <td class="p-3">${o.phone}</td>
+                        <td class="p-3">${o.product}</td>
+                        <td class="p-3">${o.city}</td>
+                        <td class="p-3 text-amber-400 font-bold">${o.total.toLocaleString()} FCFA</td>
+                        <td class="p-3">${o.payment}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="deleteOrder(${o.id})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('admin-orders-tbody').innerHTML = ordersHtml || '<tr><td colspan="8" class="p-4 text-center text-gray-500">Aucune commande enregistrée</td></tr>';
+
+            let prodHtml = '';
+            products.forEach(p => {
+                prodHtml += `
+                    <tr class="hover:bg-zinc-800/50">
+                        <td class="p-3"><img src="${p.image}" class="w-10 h-10 rounded-lg object-cover"></td>
+                        <td class="p-3 font-semibold text-white">${p.name}</td>
+                        <td class="p-3">${p.category}</td>
+                        <td class="p-3 text-amber-400">${p.price.toLocaleString()} FCFA</td>
+                        <td class="p-3 font-bold text-white"><span class="bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg text-amber-300">${p.stock} unités</span></td>
+                        <td class="p-3 text-right space-x-2">
+                            <button onclick="editProduct(${p.id})" class="text-amber-400 hover:text-amber-300"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteProduct(${p.id})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('admin-products-tbody').innerHTML = prodHtml || '<tr><td colspan="6" class="p-4 text-center text-gray-500">Aucun produit</td></tr>';
+
+            let courierOptions = '';
+            let courierPills = '';
+            couriers.forEach(c => {
+                courierOptions += `<option value="${c}">${c}</option>`;
+                courierPills += `<span class="bg-black border border-zinc-700 px-3 py-1 rounded-xl text-xs text-amber-300 flex items-center gap-2">${c} <button onclick="removeCourier('${c}')" class="text-rose-400 hover:text-rose-300">&times;</button></span>`;
+            });
+            document.getElementById('deliv-courier').innerHTML = courierOptions;
+            document.getElementById('dist-courier').innerHTML = courierOptions;
+            document.getElementById('couriers-list').innerHTML = courierPills;
+
+            let delivHtml = '';
+            deliveries.forEach(d => {
+                delivHtml += `
+                    <tr class="hover:bg-zinc-800/50">
+                        <td class="p-3 text-gray-400">${d.date}</td>
+                        <td class="p-3 font-semibold text-white">${d.courier}</td>
+                        <td class="p-3">${d.matricule}</td>
+                        <td class="p-3">${d.count}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">${d.status}</span></td>
+                        <td class="p-3 text-right">
+                            <button onclick="deleteDelivery(${d.id})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('admin-deliveries-tbody').innerHTML = delivHtml || '<tr><td colspan="6" class="p-4 text-center text-gray-500">Aucune livraison enregistrée</td></tr>';
+
+            let distHtml = '';
+            distributions.forEach(di => {
+                let totalEnCours = Number(di.yesterday) + Number(di.given);
+                distHtml += `
+                    <tr class="hover:bg-zinc-800/50">
+                        <td class="p-3 text-gray-400">${di.date}</td>
+                        <td class="p-3 font-semibold text-white">${di.courier}</td>
+                        <td class="p-3">${di.yesterday}</td>
+                        <td class="p-3">${di.given}</td>
+                        <td class="p-3 font-bold text-amber-400">${totalEnCours} colis</td>
+                        <td class="p-3 text-right">
+                            <button onclick="deleteDistribution(${di.id})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('admin-distribution-tbody').innerHTML = distHtml || '<tr><td colspan="6" class="p-4 text-center text-gray-500">Aucune distribution enregistrée</td></tr>';
+
+            document.getElementById('fee-dakar-input').value = settings.feeDakar;
+            document.getElementById('fee-region-input').value = settings.feeRegion;
+            document.getElementById('banner-tag-input').value = settings.bannerTag;
+            document.getElementById('banner-title-input').value = settings.bannerTitle;
+            document.getElementById('banner-desc-input').value = settings.bannerDesc;
+            document.getElementById('banner-img-input').value = settings.bannerImg;
+            document.getElementById('sheets-webhook-input').value = settings.webhookUrl;
+        }
+
+        function openProductModal() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-stock').value = 50;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+        function saveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const name = document.getElementById('prod-name').value;
+            const category = document.getElementById('prod-category').value;
+            const price = Number(document.getElementById('prod-price').value);
+            const stock = Number(document.getElementById('prod-stock').value);
+            const image = document.getElementById('prod-image').value;
+
+            if(id) {
+                let p = products.find(x => x.id == id);
+                p.name = name; p.category = category; p.price = price; p.stock = stock; p.image = image;
+            } else {
+                products.push({ id: Date.now(), name, category, price, stock, image });
+            }
+            closeProductModal();
+            saveAll();
+        }
+        function editProduct(id) {
+            let p = products.find(x => x.id == id);
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-name').value = p.name;
+            document.getElementById('prod-category').value = p.category;
+            document.getElementById('prod-price').value = p.price;
+            document.getElementById('prod-stock').value = p.stock;
+            document.getElementById('prod-image').value = p.image;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+        function deleteProduct(id) {
+            products = products.filter(x => x.id != id);
+            saveAll();
+        }
+
+        function addCourier() {
+            const name = document.getElementById('new-courier-name').value.trim();
+            if(name && !couriers.includes(name)) {
+                couriers.push(name);
+                document.getElementById('new-courier-name').value = '';
+                saveAll();
+                alert(`Livreur "${name}" ajouté avec succès !`);
+            }
+        }
+        function removeCourier(name) {
+            couriers = couriers.filter(c => c !== name);
+            saveAll();
+        }
+
+        function openDeliveryModal() {
+            document.getElementById('delivery-form').reset();
+            document.getElementById('deliv-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('delivery-modal').classList.remove('hidden');
+        }
+        function closeDeliveryModal() {
+            document.getElementById('delivery-modal').classList.add('hidden');
+        }
+        function saveDelivery(e) {
+            e.preventDefault();
+            deliveries.unshift({
+                id: Date.now(),
+                date: document.getElementById('deliv-date').value,
+                courier: document.getElementById('deliv-courier').value,
+                matricule: document.getElementById('deliv-matricule').value,
+                count: Number(document.getElementById('deliv-count').value),
+                status: document.getElementById('deliv-status').value
+            });
+            closeDeliveryModal();
+            saveAll();
+        }
+        function deleteDelivery(id) {
+            deliveries = deliveries.filter(x => x.id != id);
+            saveAll();
+        }
+
+        function openDistributionModal() {
+            document.getElementById('distribution-form').reset();
+            document.getElementById('dist-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('distribution-modal').classList.remove('hidden');
+        }
+        function closeDistributionModal() {
+            document.getElementById('distribution-modal').classList.add('hidden');
+        }
+        function saveDistribution(e) {
+            e.preventDefault();
+            distributions.unshift({
+                id: Date.now(),
+                date: document.getElementById('dist-date').value,
+                courier: document.getElementById('dist-courier').value,
+                yesterday: Number(document.getElementById('dist-yesterday').value),
+                given: Number(document.getElementById('dist-given').value)
+            });
+            closeDistributionModal();
+            saveAll();
+        }
+        function deleteDistribution(id) {
+            distributions = distributions.filter(x => x.id != id);
+            saveAll();
+        }
+
+        function saveShippingFees(e) {
+            e.preventDefault();
+            settings.feeDakar = Number(document.getElementById('fee-dakar-input').value);
+            settings.feeRegion = Number(document.getElementById('fee-region-input').value);
+            saveAll();
+            alert('Tarifs de livraison mis à jour !');
+        }
+
+        function saveBannerSettings(e) {
+            e.preventDefault();
+            settings.bannerTag = document.getElementById('banner-tag-input').value;
+            settings.bannerTitle = document.getElementById('banner-title-input').value;
+            settings.bannerDesc = document.getElementById('banner-desc-input').value;
+            settings.bannerImg = document.getElementById('banner-img-input').value;
+            saveAll();
+            alert('Bannière mise à jour avec succès !');
+        }
+
+        function saveWebhook() {
+            settings.webhookUrl = document.getElementById('sheets-webhook-input').value;
+            saveAll();
+            alert('Liaison Google Sheets enregistrée !');
+        }
+
+        function saveNewPin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('new-pin-input').value;
+            if(pin.length === 4) {
+                settings.pin = pin;
+                saveAll();
+                alert('Code PIN modifié avec succès !');
+            } else {
+                alert('Le PIN doit comporter exactement 4 chiffres.');
+            }
+        }
+
+        function deleteOrder(id) {
+            orders = orders.filter(x => x.id != id);
+            saveAll();
+        }
+
+        function exportOrdersToSheets() {
+            if(!settings.webhookUrl) {
+                alert('Veuillez d\'abord configurer votre Webhook Google Sheets dans l\'onglet Paramètres.');
+                return;
+            }
+            orders.forEach(o => {
+                fetch(settings.webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(o)
+                }).catch(err => console.log('Erreur d\'exportation:', err));
+            });
+            alert('Synchronisation vers Google Sheets déclenchée avec succès !');
+        }
+
+        function setChartFilter(type) {
+            ['day', 'month', 'year'].forEach(t => {
+                document.getElementById(`chart-btn-${t}`).className = t === type ? 'px-3 py-1 rounded-lg bg-amber-500 text-black font-semibold' : 'px-3 py-1 rounded-lg text-gray-400 hover:text-white';
+            });
+
+            const labelsContainer = document.getElementById('chart-labels');
+            const line = document.getElementById('chart-path-line');
+            const area = document.getElementById('chart-path-area');
+
+            if(type === 'day') {
+                labelsContainer.innerHTML = `
+                    <span>Lundi</span>
+                    <span>Mardi</span>
+                    <span>Mercredi</span>
+                    <span>Jeudi</span>
+                    <span>Vendredi</span>
+                    <span>Samedi</span>
+                `;
+                line.setAttribute('d', 'M 0 140 Q 100 60, 200 100 T 400 50 T 600 30');
+                area.setAttribute('d', 'M 0 140 Q 100 60, 200 100 T 400 50 T 600 30 L 600 200 L 0 200 Z');
+            } else if(type === 'month') {
+                labelsContainer.innerHTML = `
+                    <span>Janv</span>
+                    <span>Févr</span>
+                    <span>Mars</span>
+                    <span>Avr</span>
+                    <span>Mai</span>
+                    <span>Juin</span>
+                `;
+                line.setAttribute('d', 'M 0 160 Q 120 100, 240 120 T 480 40 T 600 20');
+                area.setAttribute('d', 'M 0 160 Q 120 100, 240 120 T 480 40 T 600 20 L 600 200 L 0 200 Z');
+            } else if(type === 'year') {
+                labelsContainer.innerHTML = `
+                    <span>2023</span>
+                    <span>2024</span>
+                    <span>2025</span>
+                    <span>2026</span>
+                `;
+                line.setAttribute('d', 'M 0 170 Q 150 130, 300 80 T 600 15');
+                area.setAttribute('d', 'M 0 170 Q 150 130, 300 80 T 600 15 L 600 200 L 0 200 Z');
+            }
+        }
+
+        window.onload = function() {
+            renderAll();
+        }
+    </script>
+</body>
+</html>
